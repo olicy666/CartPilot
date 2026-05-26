@@ -1,0 +1,147 @@
+[
+  {
+    "category_id": "headphones",
+    "display_name": "耳机",
+    "aliases": ["耳机", "蓝牙耳机", "降噪耳机", "头戴式耳机", "入耳式耳机"],
+    "decision_dimensions": [
+      {"name": "noise_cancellation", "label": "降噪", "keywords": ["降噪", "主动降噪", "通勤"]},
+      {"name": "battery_life", "label": "续航", "keywords": ["续航", "长续航"]},
+      {"name": "comfort", "label": "舒适度", "keywords": ["舒适", "戴久", "压迫", "夹头"]},
+      {"name": "form_factor", "label": "佩戴方式", "keywords": ["入耳式", "头戴式", "半入耳"]}
+    ],
+    "required_specs": ["form_factor", "noise_cancellation", "battery_life", "weight_g"],
+    "scenario_weights": {
+      "通勤": {"noise_cancellation": 0.35, "battery_life": 0.2, "comfort": 0.25},
+      "办公": {"comfort": 0.3, "noise_cancellation": 0.25, "battery_life": 0.15}
+    },
+    "common_risks": ["夹头", "闷热", "风噪", "底噪"]
+  },
+  {
+    "category_id": "laptop",
+    "display_name": "笔记本电脑",
+    "aliases": ["笔记本", "笔记本电脑", "电脑", "轻薄本", "游戏本"],
+    "decision_dimensions": [
+      {"name": "cpu", "label": "CPU", "keywords": ["处理器", "CPU", "性能"]},
+      {"name": "gpu", "label": "显卡", "keywords": ["显卡", "GPU", "深度学习", "跑模型"]},
+      {"name": "ram", "label": "内存", "keywords": ["内存", "多开"]},
+      {"name": "cooling", "label": "散热", "keywords": ["散热", "风扇", "噪音"]},
+      {"name": "weight_kg", "label": "重量", "keywords": ["轻便", "重量", "便携"]},
+      {"name": "battery_life", "label": "续航", "keywords": ["续航", "电池"]}
+    ],
+    "required_specs": ["cpu", "gpu", "ram_gb", "storage_gb", "weight_kg", "battery_life"],
+    "scenario_weights": {
+      "深度学习": {"gpu": 0.35, "ram": 0.2, "cooling": 0.15, "cpu": 0.15},
+      "编程": {"cpu": 0.25, "ram": 0.25, "keyboard": 0.15, "weight_kg": 0.1},
+      "办公": {"weight_kg": 0.25, "battery_life": 0.25, "screen": 0.15}
+    },
+    "common_risks": ["散热差", "噪音大", "续航虚标", "售后争议"]
+  },
+  {
+    "category_id": "tablet",
+    "display_name": "平板",
+    "aliases": ["平板", "平板电脑", "iPad", "MatePad", "小米 Pad"],
+    "decision_dimensions": [
+      {"name": "stylus_support", "label": "手写体验", "keywords": ["手写", "记笔记", "笔"]},
+      {"name": "screen", "label": "屏幕", "keywords": ["屏幕", "护眼", "高刷"]},
+      {"name": "chip", "label": "性能", "keywords": ["性能", "芯片", "剪视频"]},
+      {"name": "ecosystem", "label": "生态", "keywords": ["生态", "苹果", "鸿蒙", "多设备"]},
+      {"name": "battery_life", "label": "续航", "keywords": ["续航"]}
+    ],
+    "required_specs": ["chip", "screen", "stylus_support", "storage_gb"],
+    "scenario_weights": {
+      "记笔记": {"stylus_support": 0.35, "screen": 0.2, "battery_life": 0.15},
+      "剪视频": {"chip": 0.3, "screen": 0.2, "storage_gb": 0.15}
+    },
+    "common_risks": ["配件贵", "软件适配不足", "重量偏大"]
+  },
+  {
+    "category_id": "phone",
+    "display_name": "手机",
+    "aliases": ["手机", "智能手机", "iPhone", "安卓机"],
+    "decision_dimensions": [
+      {"name": "camera", "label": "影像", "keywords": ["拍照", "影像", "相机"]},
+      {"name": "battery_life", "label": "续航", "keywords": ["续航", "电池"]},
+      {"name": "chip", "label": "性能", "keywords": ["性能", "游戏", "芯片"]},
+      {"name": "screen", "label": "屏幕", "keywords": ["屏幕", "护眼", "高刷"]}
+    ],
+    "required_specs": ["chip", "screen", "battery_life", "camera"],
+    "scenario_weights": {
+      "拍照": {"camera": 0.35, "chip": 0.1},
+      "游戏": {"chip": 0.3, "screen": 0.2, "battery_life": 0.2}
+    },
+    "common_risks": ["发热", "信号弱", "续航衰减"]
+  },
+  {
+    "category_id": "monitor",
+    "display_name": "显示器",
+    "aliases": ["显示器", "屏幕", "外接屏", "电竞显示器"],
+    "decision_dimensions": [
+      {"name": "size", "label": "尺寸", "keywords": ["尺寸", "27寸", "32寸"]},
+      {"name": "resolution", "label": "分辨率", "keywords": ["分辨率", "4K", "2K"]},
+      {"name": "refresh_rate", "label": "刷新率", "keywords": ["高刷", "刷新率", "游戏"]},
+      {"name": "color_accuracy", "label": "色彩", "keywords": ["色彩", "修图", "设计"]},
+      {"name": "eye_care", "label": "护眼", "keywords": ["护眼", "低蓝光"]}
+    ],
+    "required_specs": ["size", "resolution", "refresh_rate", "panel_shape"],
+    "scenario_weights": {
+      "办公": {"eye_care": 0.25, "size": 0.15},
+      "游戏": {"refresh_rate": 0.3, "response_time": 0.2},
+      "设计": {"color_accuracy": 0.35, "resolution": 0.25}
+    },
+    "common_risks": ["漏光", "拖影", "支架不稳"]
+  },
+  {
+    "category_id": "projector",
+    "display_name": "投影仪",
+    "aliases": ["投影仪", "家用投影", "投影机"],
+    "decision_dimensions": [
+      {"name": "brightness", "label": "亮度", "keywords": ["亮度", "白天", "流明"]},
+      {"name": "resolution", "label": "分辨率", "keywords": ["清晰", "分辨率", "4K", "1080P"]},
+      {"name": "throw_ratio", "label": "投射比", "keywords": ["小户型", "短焦", "卧室"]},
+      {"name": "noise", "label": "噪音", "keywords": ["噪音", "安静"]},
+      {"name": "system", "label": "系统", "keywords": ["系统", "会员", "广告"]}
+    ],
+    "required_specs": ["brightness", "resolution", "throw_ratio"],
+    "scenario_weights": {
+      "家庭影院": {"brightness": 0.25, "resolution": 0.25, "noise": 0.15},
+      "小户型": {"throw_ratio": 0.3, "noise": 0.15}
+    },
+    "common_risks": ["白天不够亮", "风扇噪音", "系统广告"]
+  },
+  {
+    "category_id": "coffee_machine",
+    "display_name": "咖啡机",
+    "aliases": ["咖啡机", "半自动咖啡机", "全自动咖啡机", "胶囊咖啡机"],
+    "decision_dimensions": [
+      {"name": "machine_type", "label": "类型", "keywords": ["半自动", "全自动", "胶囊"]},
+      {"name": "pressure_bar", "label": "压力", "keywords": ["压力", "萃取"]},
+      {"name": "milk_frothing", "label": "奶泡", "keywords": ["奶泡", "拿铁", "卡布奇诺"]},
+      {"name": "cleaning", "label": "清洁", "keywords": ["清洁", "维护"]},
+      {"name": "footprint", "label": "占地", "keywords": ["小户型", "占地", "厨房"]}
+    ],
+    "required_specs": ["machine_type", "pressure_bar", "milk_frothing"],
+    "scenario_weights": {
+      "小户型": {"footprint": 0.25, "cleaning": 0.2},
+      "办公室": {"cleaning": 0.25, "machine_type": 0.2}
+    },
+    "common_risks": ["清洁麻烦", "噪音大", "耗材贵"]
+  },
+  {
+    "category_id": "air_fryer",
+    "display_name": "空气炸锅",
+    "aliases": ["空气炸锅", "炸锅", "无油炸锅"],
+    "decision_dimensions": [
+      {"name": "capacity_l", "label": "容量", "keywords": ["容量", "几口人", "大容量"]},
+      {"name": "power_w", "label": "功率", "keywords": ["功率", "加热"]},
+      {"name": "cleaning", "label": "清洁", "keywords": ["清洁", "洗"]},
+      {"name": "noise", "label": "噪音", "keywords": ["噪音", "安静"]},
+      {"name": "window", "label": "可视窗", "keywords": ["可视", "窗口"]}
+    ],
+    "required_specs": ["capacity_l", "power_w", "window"],
+    "scenario_weights": {
+      "小户型": {"capacity_l": 0.2, "noise": 0.2},
+      "家庭": {"capacity_l": 0.3, "cleaning": 0.2}
+    },
+    "common_risks": ["涂层磨损", "受热不均", "占地大"]
+  }
+]

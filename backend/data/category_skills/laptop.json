@@ -1,0 +1,23 @@
+{
+  "category_id": "laptop",
+  "display_name": "笔记本电脑",
+  "aliases": ["笔记本", "笔记本电脑", "电脑", "轻薄本", "游戏本", "MacBook Air", "ThinkPad"],
+  "decision_dimensions": [
+    {"name": "cpu", "label": "CPU", "keywords": ["处理器", "CPU", "性能"]},
+    {"name": "gpu", "label": "显卡", "keywords": ["显卡", "GPU", "深度学习", "跑模型", "CUDA"]},
+    {"name": "ram", "label": "内存", "keywords": ["内存", "多开", "容器"]},
+    {"name": "cooling", "label": "散热", "keywords": ["散热", "风扇", "噪音"]},
+    {"name": "weight_kg", "label": "重量", "keywords": ["轻便", "重量", "便携"]},
+    {"name": "battery_life", "label": "续航", "keywords": ["续航", "电池"]},
+    {"name": "keyboard", "label": "键盘", "keywords": ["键盘", "打字", "写代码"]}
+  ],
+  "required_specs": ["cpu", "gpu", "ram_gb", "storage_gb", "weight_kg", "battery_life"],
+  "scenario_weights": {
+    "深度学习": {"gpu": 0.35, "ram": 0.2, "cooling": 0.15, "cpu": 0.15},
+    "编程": {"cpu": 0.25, "ram": 0.25, "keyboard": 0.15, "weight_kg": 0.1},
+    "办公": {"weight_kg": 0.25, "battery_life": 0.25, "screen": 0.15}
+  },
+  "common_risks": ["散热差", "噪音大", "续航虚标", "售后争议", "CUDA 不兼容"],
+  "extraction_hints": ["深度学习场景优先确认是否需要 NVIDIA GPU", "移动办公场景关注重量和续航"],
+  "ranking_rules": ["跑模型优先 GPU 和显存", "写代码优先内存和键盘", "轻办公优先重量和续航"]
+}

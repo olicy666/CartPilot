@@ -1,0 +1,22 @@
+{
+  "category_id": "tablet",
+  "display_name": "平板",
+  "aliases": ["平板", "平板电脑", "iPad", "iPad Air", "MatePad", "MatePad Pro", "小米 Pad"],
+  "decision_dimensions": [
+    {"name": "stylus_support", "label": "手写体验", "keywords": ["手写", "记笔记", "笔", "Apple Pencil"]},
+    {"name": "screen", "label": "屏幕", "keywords": ["屏幕", "护眼", "高刷", "OLED"]},
+    {"name": "chip", "label": "性能", "keywords": ["性能", "芯片", "剪视频"]},
+    {"name": "ecosystem", "label": "生态", "keywords": ["生态", "苹果", "鸿蒙", "多设备"]},
+    {"name": "battery_life", "label": "续航", "keywords": ["续航"]},
+    {"name": "storage_gb", "label": "存储", "keywords": ["容量", "存储", "剪视频"]}
+  ],
+  "required_specs": ["chip", "screen", "stylus_support", "storage_gb"],
+  "scenario_weights": {
+    "记笔记": {"stylus_support": 0.35, "screen": 0.2, "battery_life": 0.15},
+    "剪视频": {"chip": 0.3, "screen": 0.2, "storage_gb": 0.15},
+    "办公": {"ecosystem": 0.25, "screen": 0.15}
+  },
+  "common_risks": ["配件贵", "软件适配不足", "重量偏大", "生态割裂"],
+  "extraction_hints": ["比较任务要保留被点名产品", "记笔记需要重点检索手写评论"],
+  "ranking_rules": ["记笔记优先手写和屏幕", "剪视频优先芯片和存储", "多设备用户关注生态"]
+}

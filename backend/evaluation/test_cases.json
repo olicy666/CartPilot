@@ -1,0 +1,80 @@
+[
+  {
+    "id": "case_headphone_commute",
+    "query": "预算2000以内，通勤和办公室用，想买降噪耳机，不要入耳式，戴久不要太累",
+    "expected_category": "headphones",
+    "must_constraints": {"budget_max": 2000, "exclude_specs": {"form_factor": ["in_ear"]}},
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter", "Review Evidence Retrieval", "Rank Candidates", "Self Check"]
+  },
+  {
+    "id": "case_laptop_dl",
+    "query": "预算9000以内，想买一台适合跑深度学习和写代码的笔记本",
+    "expected_category": "laptop",
+    "must_constraints": {"budget_max": 9000},
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter", "Review Evidence Retrieval", "Rank Candidates", "Self Check"]
+  },
+  {
+    "id": "case_tablet_compare",
+    "query": "iPad Air、华为 MatePad Pro 和小米 Pad 这几个，哪个更适合记笔记和轻度剪视频？",
+    "expected_category": "tablet",
+    "expected_task_type": "comparison",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter", "Review Evidence Retrieval", "Rank Candidates", "Comparison", "Self Check"]
+  },
+  {
+    "id": "case_monitor_game",
+    "query": "预算2500以内，想买27寸游戏显示器，最好高刷护眼，不要曲面屏",
+    "expected_category": "monitor",
+    "must_constraints": {"budget_max": 2500, "exclude_specs": {"panel_shape": ["curved"]}},
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter"]
+  },
+  {
+    "id": "case_projector_home",
+    "query": "想买家用投影仪，客厅看电影，预算5000以内，白天也别太暗",
+    "expected_category": "projector",
+    "must_constraints": {"budget_max": 5000},
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter"]
+  },
+  {
+    "id": "case_phone_game",
+    "query": "3000到4000左右买手机，主要玩游戏，续航要强",
+    "expected_category": "phone",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search"]
+  },
+  {
+    "id": "case_coffee_small",
+    "query": "小户型想买咖啡机，预算1000以内，清洁方便一点",
+    "expected_category": "coffee_machine",
+    "must_constraints": {"budget_max": 1000},
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search"]
+  },
+  {
+    "id": "case_air_fryer_family",
+    "query": "家里三四个人用空气炸锅，希望容量大一点，好清洗",
+    "expected_category": "air_fryer",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search"]
+  },
+  {
+    "id": "case_unknown_gift",
+    "query": "我想买个送朋友的东西，预算500",
+    "expected_category": null,
+    "need_clarification": true,
+    "expected_trace_steps": ["Intent Parser", "Clarification"]
+  },
+  {
+    "id": "case_headphone_pin_ban",
+    "query": "预算2000以内，买通勤降噪耳机，不要入耳式",
+    "expected_category": "headphones",
+    "brief_overrides": {"banned_product_ids": ["H005"], "pinned_product_ids": ["H004"]},
+    "need_clarification": false,
+    "expected_top_product_id": "H004",
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter", "Rank Candidates"]
+  }
+]

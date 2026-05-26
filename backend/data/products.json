@@ -1,0 +1,212 @@
+[
+  {
+    "product_id": "H001",
+    "title": "Sony WH-1000XM5 头戴式降噪耳机",
+    "category": "headphones",
+    "brand": "Sony",
+    "price": 2499,
+    "specs": {"form_factor": "over_ear", "noise_cancellation": true, "battery_life": "30h", "weight_g": 250},
+    "description": "旗舰头戴式主动降噪耳机，适合通勤、办公和长时间聆听。",
+    "tags": ["通勤", "办公", "降噪", "头戴式", "长续航"]
+  },
+  {
+    "product_id": "H002",
+    "title": "Bose QuietComfort Ultra 消噪耳机",
+    "category": "headphones",
+    "brand": "Bose",
+    "price": 2999,
+    "specs": {"form_factor": "over_ear", "noise_cancellation": true, "battery_life": "24h", "weight_g": 254},
+    "description": "舒适取向的高端降噪耳机，适合通勤和办公室。",
+    "tags": ["通勤", "办公", "降噪", "舒适", "头戴式"]
+  },
+  {
+    "product_id": "H003",
+    "title": "Apple AirPods Pro 2 入耳式降噪耳机",
+    "category": "headphones",
+    "brand": "Apple",
+    "price": 1899,
+    "specs": {"form_factor": "in_ear", "noise_cancellation": true, "battery_life": "6h", "weight_g": 11},
+    "description": "苹果生态入耳式主动降噪耳机，便携性强。",
+    "tags": ["通勤", "降噪", "入耳式", "苹果生态", "轻便"]
+  },
+  {
+    "product_id": "H004",
+    "title": "SoundCore Space One 头戴式降噪耳机",
+    "category": "headphones",
+    "brand": "SoundCore",
+    "price": 799,
+    "specs": {"form_factor": "over_ear", "noise_cancellation": true, "battery_life": "40h", "weight_g": 265},
+    "description": "高性价比头戴式降噪耳机，续航较强。",
+    "tags": ["通勤", "降噪", "头戴式", "长续航", "性价比"]
+  },
+  {
+    "product_id": "H005",
+    "title": "Edifier W830NB 长续航降噪耳机",
+    "category": "headphones",
+    "brand": "Edifier",
+    "price": 499,
+    "specs": {"form_factor": "over_ear", "noise_cancellation": true, "battery_life": "94h", "weight_g": 267},
+    "description": "主打超长续航和基础主动降噪，适合预算有限的通勤用户。",
+    "tags": ["通勤", "降噪", "头戴式", "长续航", "性价比"]
+  },
+  {
+    "product_id": "L001",
+    "title": "Lenovo Legion R9000P RTX4060 游戏本",
+    "category": "laptop",
+    "brand": "Lenovo",
+    "price": 8499,
+    "specs": {"cpu": "Ryzen 9", "gpu": "RTX 4060", "ram_gb": 16, "storage_gb": 1024, "weight_kg": 2.4, "battery_life": "6h", "cooling": "strong"},
+    "description": "高性能游戏本，适合游戏、编程和本地深度学习入门。",
+    "tags": ["游戏", "编程", "深度学习", "高性能", "散热"]
+  },
+  {
+    "product_id": "L002",
+    "title": "MacBook Air M3 13 英寸",
+    "category": "laptop",
+    "brand": "Apple",
+    "price": 7999,
+    "specs": {"cpu": "Apple M3", "gpu": "Apple M3 integrated", "ram_gb": 16, "storage_gb": 512, "weight_kg": 1.24, "battery_life": "15h", "cooling": "fanless"},
+    "description": "轻薄长续航笔记本，适合办公、编程和移动开发。",
+    "tags": ["办公", "编程", "轻便", "长续航", "安静"]
+  },
+  {
+    "product_id": "L003",
+    "title": "ThinkPad T14 锐龙版",
+    "category": "laptop",
+    "brand": "ThinkPad",
+    "price": 6999,
+    "specs": {"cpu": "Ryzen 7", "gpu": "integrated", "ram_gb": 32, "storage_gb": 1024, "weight_kg": 1.36, "battery_life": "10h", "cooling": "medium"},
+    "description": "商务办公和编程取向，键盘手感和扩展性较好。",
+    "tags": ["办公", "编程", "轻便", "商务"]
+  },
+  {
+    "product_id": "T001",
+    "title": "iPad Air M2",
+    "category": "tablet",
+    "brand": "Apple",
+    "price": 4799,
+    "specs": {"chip": "M2", "screen": "11 inch Liquid Retina", "stylus_support": true, "storage_gb": 128, "ecosystem": "Apple"},
+    "description": "适合记笔记、轻度剪视频和苹果生态用户。",
+    "tags": ["记笔记", "剪视频", "苹果生态", "手写"]
+  },
+  {
+    "product_id": "T002",
+    "title": "Huawei MatePad Pro 12.2",
+    "category": "tablet",
+    "brand": "Huawei",
+    "price": 4499,
+    "specs": {"chip": "Kirin", "screen": "12.2 inch OLED", "stylus_support": true, "storage_gb": 256, "ecosystem": "HarmonyOS"},
+    "description": "适合手写、办公和鸿蒙多设备协同。",
+    "tags": ["记笔记", "办公", "鸿蒙生态", "手写", "护眼"]
+  },
+  {
+    "product_id": "T003",
+    "title": "Xiaomi Pad 6S Pro",
+    "category": "tablet",
+    "brand": "Xiaomi",
+    "price": 3299,
+    "specs": {"chip": "Snapdragon 8 Gen 2", "screen": "12.4 inch 3K 144Hz", "stylus_support": true, "storage_gb": 256, "ecosystem": "Android"},
+    "description": "高性价比大屏平板，适合影音、记笔记和轻度剪视频。",
+    "tags": ["记笔记", "剪视频", "高刷", "性价比"]
+  },
+  {
+    "product_id": "P001",
+    "title": "iPhone 15",
+    "category": "phone",
+    "brand": "Apple",
+    "price": 4999,
+    "specs": {"chip": "A16", "screen": "OLED 60Hz", "battery_life": "20h video", "camera": "dual 48MP"},
+    "description": "均衡型苹果手机，适合拍照和日常使用。",
+    "tags": ["拍照", "苹果生态", "日常"]
+  },
+  {
+    "product_id": "P002",
+    "title": "OnePlus Ace 3 Pro",
+    "category": "phone",
+    "brand": "OnePlus",
+    "price": 3299,
+    "specs": {"chip": "Snapdragon 8 Gen 3", "screen": "OLED 120Hz", "battery_life": "6100mAh", "camera": "50MP"},
+    "description": "主打性能和续航，适合游戏和高强度使用。",
+    "tags": ["游戏", "性能", "长续航", "高刷"]
+  },
+  {
+    "product_id": "M001",
+    "title": "Dell U2723QE 27 英寸 4K 显示器",
+    "category": "monitor",
+    "brand": "Dell",
+    "price": 3299,
+    "specs": {"size": "27 inch", "resolution": "4K", "refresh_rate": "60Hz", "panel_shape": "flat", "color_accuracy": "high", "eye_care": true},
+    "description": "办公和设计取向的 4K 显示器。",
+    "tags": ["办公", "设计", "4K", "护眼"]
+  },
+  {
+    "product_id": "M002",
+    "title": "AOC Q27G3XMN 27 英寸 MiniLED 显示器",
+    "category": "monitor",
+    "brand": "AOC",
+    "price": 1999,
+    "specs": {"size": "27 inch", "resolution": "2K", "refresh_rate": "180Hz", "panel_shape": "flat", "color_accuracy": "medium", "eye_care": true},
+    "description": "高刷电竞显示器，兼顾游戏和影音。",
+    "tags": ["游戏", "高刷", "护眼", "性价比"]
+  },
+  {
+    "product_id": "PR001",
+    "title": "XGIMI H6 4K 家用投影仪",
+    "category": "projector",
+    "brand": "XGIMI",
+    "price": 4999,
+    "specs": {"brightness": "1200 CVIA", "resolution": "4K", "throw_ratio": "1.2:1", "noise": "low", "system": "Android TV"},
+    "description": "适合客厅和家庭影院的 4K 投影。",
+    "tags": ["家庭影院", "4K", "客厅"]
+  },
+  {
+    "product_id": "PR002",
+    "title": "JMGO N1 Air 便携投影仪",
+    "category": "projector",
+    "brand": "JMGO",
+    "price": 2599,
+    "specs": {"brightness": "700 CVIA", "resolution": "1080P", "throw_ratio": "1.2:1", "noise": "medium", "system": "Android"},
+    "description": "便携投影，适合卧室和小户型。",
+    "tags": ["小户型", "卧室", "便携"]
+  },
+  {
+    "product_id": "C001",
+    "title": "DeLonghi Magnifica S 全自动咖啡机",
+    "category": "coffee_machine",
+    "brand": "DeLonghi",
+    "price": 3299,
+    "specs": {"machine_type": "automatic", "pressure_bar": 15, "milk_frothing": true, "cleaning": "auto", "footprint": "medium"},
+    "description": "适合家用和办公室的全自动意式咖啡机。",
+    "tags": ["办公室", "全自动", "奶泡"]
+  },
+  {
+    "product_id": "C002",
+    "title": "Nespresso Essenza Mini 胶囊咖啡机",
+    "category": "coffee_machine",
+    "brand": "Nespresso",
+    "price": 899,
+    "specs": {"machine_type": "capsule", "pressure_bar": 19, "milk_frothing": false, "cleaning": "easy", "footprint": "small"},
+    "description": "小巧易清洁，适合小户型和轻量咖啡需求。",
+    "tags": ["小户型", "胶囊", "易清洁"]
+  },
+  {
+    "product_id": "A001",
+    "title": "Philips HD9252 空气炸锅",
+    "category": "air_fryer",
+    "brand": "Philips",
+    "price": 699,
+    "specs": {"capacity_l": 4.1, "power_w": 1400, "window": false, "cleaning": "easy", "noise": "medium"},
+    "description": "经典小容量空气炸锅，适合 1-3 人家庭。",
+    "tags": ["小户型", "易清洁", "家庭"]
+  },
+  {
+    "product_id": "A002",
+    "title": "Midea KZC6502XM 大容量空气炸锅",
+    "category": "air_fryer",
+    "brand": "Midea",
+    "price": 499,
+    "specs": {"capacity_l": 6.5, "power_w": 1500, "window": true, "cleaning": "easy", "noise": "medium"},
+    "description": "大容量可视空气炸锅，适合多人家庭。",
+    "tags": ["家庭", "大容量", "可视窗", "性价比"]
+  }
+]

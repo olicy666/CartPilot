@@ -1,0 +1,22 @@
+{
+  "category_id": "headphones",
+  "display_name": "耳机",
+  "aliases": ["耳机", "蓝牙耳机", "降噪耳机", "头戴式耳机", "入耳式耳机", "AirPods Pro", "WH-1000XM5", "QuietComfort"],
+  "decision_dimensions": [
+    {"name": "noise_cancellation", "label": "降噪", "keywords": ["降噪", "主动降噪", "通勤", "地铁"]},
+    {"name": "battery_life", "label": "续航", "keywords": ["续航", "长续航", "电池"]},
+    {"name": "comfort", "label": "舒适度", "keywords": ["舒适", "戴久", "压迫", "夹头", "闷"]},
+    {"name": "form_factor", "label": "佩戴方式", "keywords": ["入耳式", "头戴式", "半入耳"]},
+    {"name": "call_quality", "label": "通话", "keywords": ["通话", "麦克风", "会议"]},
+    {"name": "latency", "label": "延迟", "keywords": ["延迟", "游戏", "低延迟"]}
+  ],
+  "required_specs": ["form_factor", "noise_cancellation", "battery_life", "weight_g"],
+  "scenario_weights": {
+    "通勤": {"noise_cancellation": 0.35, "battery_life": 0.2, "comfort": 0.25},
+    "办公": {"comfort": 0.3, "noise_cancellation": 0.25, "call_quality": 0.2},
+    "游戏": {"latency": 0.3, "comfort": 0.2}
+  },
+  "common_risks": ["夹头", "闷热", "风噪", "底噪", "通话收音差"],
+  "extraction_hints": ["区分入耳式/头戴式", "预算是硬约束", "舒适度优先引用评论证据"],
+  "ranking_rules": ["硬约束先过滤", "通勤场景提高降噪权重", "长时间佩戴提高舒适度权重"]
+}

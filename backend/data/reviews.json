@@ -1,0 +1,41 @@
+[
+  {"review_id": "RH001", "product_id": "H001", "rating": 5, "content": "地铁通勤降噪很明显，办公室开空调也能安静工作。", "aspects": {"noise_cancellation": "positive", "comfort": "positive"}},
+  {"review_id": "RH002", "product_id": "H001", "rating": 4, "content": "续航够用，但夏天戴久了会有点闷。", "aspects": {"battery_life": "positive", "comfort": "negative"}},
+  {"review_id": "RH003", "product_id": "H002", "rating": 5, "content": "佩戴比想象中舒服，不太夹头，降噪稳定。", "aspects": {"comfort": "positive", "noise_cancellation": "positive"}},
+  {"review_id": "RH004", "product_id": "H002", "rating": 4, "content": "价格偏高，续航正常，适合办公室。", "aspects": {"battery_life": "neutral", "comfort": "positive"}},
+  {"review_id": "RH005", "product_id": "H003", "rating": 5, "content": "入耳式很便携，苹果设备切换顺滑，降噪不错。", "aspects": {"form_factor": "positive", "noise_cancellation": "positive"}},
+  {"review_id": "RH006", "product_id": "H003", "rating": 3, "content": "单次续航一般，耳朵敏感的人戴久会胀。", "aspects": {"battery_life": "negative", "comfort": "negative"}},
+  {"review_id": "RH007", "product_id": "H004", "rating": 4, "content": "这个价格有主动降噪和 40 小时续航，通勤够用了。", "aspects": {"noise_cancellation": "positive", "battery_life": "positive"}},
+  {"review_id": "RH008", "product_id": "H004", "rating": 4, "content": "耳罩偏大但不夹头，夏天会有点热。", "aspects": {"comfort": "positive"}},
+  {"review_id": "RH009", "product_id": "H005", "rating": 4, "content": "续航非常夸张，几乎不用频繁充电。", "aspects": {"battery_life": "positive"}},
+  {"review_id": "RH010", "product_id": "H005", "rating": 3, "content": "降噪是够用级别，不如旗舰，佩戴还算舒服。", "aspects": {"noise_cancellation": "neutral", "comfort": "positive"}},
+
+  {"review_id": "RL001", "product_id": "L001", "rating": 5, "content": "RTX 4060 跑本地模型入门够用，散热压得住。", "aspects": {"gpu": "positive", "cooling": "positive"}},
+  {"review_id": "RL002", "product_id": "L001", "rating": 3, "content": "性能强但机器比较重，出门背着累。", "aspects": {"weight_kg": "negative", "cpu": "positive"}},
+  {"review_id": "RL003", "product_id": "L002", "rating": 5, "content": "写代码很安静，续航长，带去图书馆很舒服。", "aspects": {"battery_life": "positive", "comfort": "positive"}},
+  {"review_id": "RL004", "product_id": "L002", "rating": 3, "content": "不适合依赖 NVIDIA CUDA 的深度学习任务。", "aspects": {"gpu": "negative"}},
+  {"review_id": "RL005", "product_id": "L003", "rating": 4, "content": "32G 内存多开 IDE 和容器很稳，键盘好用。", "aspects": {"ram": "positive", "keyboard": "positive"}},
+  {"review_id": "RL006", "product_id": "L003", "rating": 4, "content": "集显性能一般，但办公和开发足够。", "aspects": {"gpu": "neutral", "cpu": "positive"}},
+
+  {"review_id": "RT001", "product_id": "T001", "rating": 5, "content": "Apple Pencil 记笔记延迟低，M2 剪短视频也很流畅。", "aspects": {"stylus_support": "positive", "chip": "positive"}},
+  {"review_id": "RT002", "product_id": "T001", "rating": 3, "content": "配件价格比较高，基础容量略小。", "aspects": {"ecosystem": "negative", "storage_gb": "neutral"}},
+  {"review_id": "RT003", "product_id": "T002", "rating": 5, "content": "手写体验很好，屏幕观感舒服，适合上课记笔记。", "aspects": {"stylus_support": "positive", "screen": "positive"}},
+  {"review_id": "RT004", "product_id": "T002", "rating": 4, "content": "鸿蒙协同方便，但部分专业软件生态一般。", "aspects": {"ecosystem": "neutral"}},
+  {"review_id": "RT005", "product_id": "T003", "rating": 4, "content": "屏幕大且高刷，轻度剪视频和看网课都不错。", "aspects": {"screen": "positive", "chip": "positive"}},
+  {"review_id": "RT006", "product_id": "T003", "rating": 4, "content": "性价比高，但手写软件体验不如 iPad。", "aspects": {"stylus_support": "neutral"}},
+
+  {"review_id": "RP001", "product_id": "P001", "rating": 4, "content": "拍照稳定，日常续航够用，苹果生态省心。", "aspects": {"camera": "positive", "battery_life": "neutral"}},
+  {"review_id": "RP002", "product_id": "P002", "rating": 5, "content": "游戏性能很强，电池大，高刷屏很顺。", "aspects": {"chip": "positive", "battery_life": "positive", "screen": "positive"}},
+
+  {"review_id": "RM001", "product_id": "M001", "rating": 5, "content": "4K 办公很清晰，色彩稳定，长时间看文档舒服。", "aspects": {"resolution": "positive", "color_accuracy": "positive", "eye_care": "positive"}},
+  {"review_id": "RM002", "product_id": "M002", "rating": 4, "content": "180Hz 玩游戏很顺，MiniLED 观感不错。", "aspects": {"refresh_rate": "positive", "screen": "positive"}},
+
+  {"review_id": "RPR001", "product_id": "PR001", "rating": 4, "content": "晚上看电影很有影院感，4K 清晰度不错。", "aspects": {"resolution": "positive", "brightness": "positive"}},
+  {"review_id": "RPR002", "product_id": "PR002", "rating": 4, "content": "卧室用够亮，体积小，但白天拉窗帘效果更好。", "aspects": {"brightness": "neutral", "throw_ratio": "positive"}},
+
+  {"review_id": "RC001", "product_id": "C001", "rating": 4, "content": "全自动省心，奶泡表现稳定，办公室用方便。", "aspects": {"machine_type": "positive", "milk_frothing": "positive", "cleaning": "positive"}},
+  {"review_id": "RC002", "product_id": "C002", "rating": 5, "content": "机器很小，清洁简单，适合小厨房。", "aspects": {"footprint": "positive", "cleaning": "positive"}},
+
+  {"review_id": "RA001", "product_id": "A001", "rating": 4, "content": "一个人或两个人用刚好，清洗比较方便。", "aspects": {"capacity_l": "neutral", "cleaning": "positive"}},
+  {"review_id": "RA002", "product_id": "A002", "rating": 4, "content": "容量大，可视窗方便观察，炸鸡翅不用翻太多次。", "aspects": {"capacity_l": "positive", "window": "positive"}}
+]
