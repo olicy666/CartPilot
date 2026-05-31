@@ -10,3 +10,4 @@ venv/
 llm.local.json
 .cache/
 runtime_memory.json
+docs/agent_newcomer_interview_guide.md
