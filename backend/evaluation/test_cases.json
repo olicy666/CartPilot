@@ -76,5 +76,76 @@
     "need_clarification": false,
     "expected_top_product_id": "H004",
     "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter", "Rank Candidates"]
+  },
+  {
+    "id": "case_headphone_office_long_battery",
+    "query": "想买头戴式耳机，办公室开会用，续航长一点",
+    "expected_category": "headphones",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Review Evidence Retrieval", "Rerank Candidates"]
+  },
+  {
+    "id": "case_laptop_macbook_thinkpad_compare",
+    "query": "MacBook Air 和 ThinkPad 选哪个适合编程办公？",
+    "expected_category": "laptop",
+    "expected_task_type": "comparison",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Comparison", "Self Check"]
+  },
+  {
+    "id": "case_tablet_class_notes",
+    "query": "想买平板电脑上课记笔记，屏幕护眼，预算5000以内",
+    "expected_category": "tablet",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Rank Candidates"]
+  },
+  {
+    "id": "case_phone_camera_budget",
+    "query": "预算5000以内，想买拍照好一点的手机，日常用",
+    "expected_category": "phone",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Self Check"]
+  },
+  {
+    "id": "case_monitor_office_design",
+    "query": "外接屏办公和设计用，27寸4K护眼，别要曲面屏",
+    "expected_category": "monitor",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter"]
+  },
+  {
+    "id": "case_projector_bedroom_quiet",
+    "query": "卧室小户型投影仪，晚上看电影，最好安静一点",
+    "expected_category": "projector",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Review Evidence Retrieval"]
+  },
+  {
+    "id": "case_coffee_office_auto",
+    "query": "办公室咖啡机，想要全自动，可以打奶泡，清洁省心",
+    "expected_category": "coffee_machine",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Rank Candidates"]
+  },
+  {
+    "id": "case_air_fryer_rent_clean",
+    "query": "两个人租房用空气炸锅，容量不用太大，最好好洗",
+    "expected_category": "air_fryer",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Self Check"]
+  },
+  {
+    "id": "case_unknown_general_gift",
+    "query": "帮我挑个礼物，别太贵",
+    "expected_category": null,
+    "need_clarification": true,
+    "expected_trace_steps": ["Intent Parser", "Clarification"]
+  },
+  {
+    "id": "case_coffee_capsule_small_home",
+    "query": "预算1000以内，小户型想买胶囊咖啡机，清洁方便",
+    "expected_category": "coffee_machine",
+    "need_clarification": false,
+    "expected_trace_steps": ["Intent Parser", "Purchase Brief", "Product Search", "Constraint Filter", "Self Check"]
   }
 ]

@@ -13,6 +13,7 @@ agent = CommerceAgent()
 class ChatRequest(BaseModel):
     query: str = Field(..., min_length=1)
     user_id: str = "demo-user"
+    session_id: str | None = None
     require_confirmation: bool = False
     use_llm: bool = False
     brief_overrides: dict | None = None
@@ -29,9 +30,26 @@ def chat(request: ChatRequest) -> dict:
     response = agent.run(
         query=request.query,
         user_id=request.user_id,
+        session_id=request.session_id,
         require_confirmation=request.require_confirmation,
         use_llm=request.use_llm,
         brief_overrides=request.brief_overrides,
         human_feedback=request.human_feedback,
     )
     return response.to_dict()
+
+
+@app.get("/monitoring/metrics")
+def monitoring_metrics() -> dict:
+    return agent.monitor.metrics()
+
+
+@app.get("/monitoring/traces")
+def monitoring_traces(limit: int = 20) -> list[dict]:
+    return agent.monitor.recent_traces(limit=limit)
+
+
+@app.get("/sessions/{session_id}/checkpoint")
+def session_checkpoint(session_id: str) -> dict:
+    checkpoint = agent.checkpoints.load_pending(session_id)
+    return checkpoint or {}

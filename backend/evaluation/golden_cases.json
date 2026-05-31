@@ -1,0 +1,17 @@
+[
+  {
+    "id": "golden_headphone_commute",
+    "query": "预算2000以内，通勤和办公室用，想买降噪耳机，不要入耳式，戴久不要太累",
+    "expected_category": "headphones",
+    "expected_status": "completed",
+    "expected_trace_prefix": ["Intent Parser", "Purchase Brief", "Product Search"],
+    "must_not_recommend_spec": {"form_factor": "in_ear"}
+  },
+  {
+    "id": "golden_unknown_category",
+    "query": "我想买个送朋友的东西，预算500",
+    "expected_category": null,
+    "expected_status": "needs_clarification",
+    "expected_trace_prefix": ["Intent Parser", "Clarification"]
+  }
+]

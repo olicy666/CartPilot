@@ -50,3 +50,17 @@ User Query
 ## LLM 接口
 
 `backend/llm/client.py` 实现了 OpenAI-compatible Chat Completions 客户端，支持从环境变量或本地 `llm.local.json` 读取配置。`backend/llm/intent_parser.py` 负责把 query、候选品类和规则 fallback 一起发给模型，要求输出 JSON intent。`backend/agents/agentic_planner.py` 负责追问生成、反馈归一化、工具规划、RAG 查询规划和推荐解释，所有输出都会先做 schema 清洗，再交给确定性工具执行。
+
+## 生产化骨架
+
+当前版本保留虚拟商品和评论数据，但已经接入 9 类生产化能力的本地实现：
+
+- Embedding / Vector DB：`backend/retrieval/embeddings.py` 提供本地 hash embedding 和 OpenAI-compatible embedding provider；`ProductVectorStore` 与 `ReviewVectorStore` 使用 SQLite 保存向量索引。默认离线可跑，设置 `EMBEDDING_PROVIDER=openai` 后可调用真实 embedding 接口。
+- Reranker：`backend/tools/rerank.py` 对商品召回、评论证据和最终候选做二次排序，排序结果会写入 `score_breakdown.rerank` 和 evidence 的 `rerank_score`。
+- 可恢复 Human-in-the-loop：`SQLiteCheckpointStore` 会按 `session_id` 保存等待确认的 purchase brief；同 session 带 `human_feedback` 继续请求时会自动恢复上一轮 query。
+- 数据库记忆：默认用户偏好记忆从进程内 dict 改为 `.cache/user_memory.sqlite`。
+- 扩展评估：`backend/evaluation/test_cases.json` 扩展到 20 条 case，并新增 `golden_cases.json` 与 golden workflow test。
+- Prompt/version 管理：`backend/prompts/registry.py` 统一登记 prompt key 和 version，LLM meta 会携带 prompt 信息。
+- 线上观测：`SQLiteRunMonitor` 记录 run trace，并统计总请求、LLM fallback 率、self-check fail 率、错误率；API 暴露 `/monitoring/metrics` 和 `/monitoring/traces`。
+- 多轮会话：`SQLiteConversationStore` 保存同一 session 的历史回答，支持回答“为什么不推荐 X”这类基于上一轮推荐的追问。
+- 安全策略：`backend/safety/policy.py` 检查广告/赞助披露、利益冲突披露和品牌集中风险，并写入 `self_check.safety_issues`。

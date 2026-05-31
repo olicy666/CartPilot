@@ -134,6 +134,53 @@ class AgentWorkflowTest(unittest.TestCase):
         self.assertFalse(result.llm_meta["used"])
         self.assertEqual(result.llm_meta["reason"], "llm_api_key_missing")
 
+    def test_session_checkpoint_can_resume_human_feedback(self) -> None:
+        agent = CommerceAgent()
+        session_id = "test-session-resume"
+        first = agent.run(
+            "我想买降噪耳机",
+            require_confirmation=True,
+            session_id=session_id,
+        )
+        self.assertEqual(first.workflow_status, "awaiting_user_confirmation")
+        self.assertTrue(agent.checkpoints.load_pending(session_id))
+
+        resumed = agent.run(
+            "继续",
+            session_id=session_id,
+            human_feedback="预算2000以内，通勤用，不要入耳式",
+        )
+        self.assertEqual(resumed.workflow_status, "completed")
+        self.assertIsNone(agent.checkpoints.load_pending(session_id))
+        self.assertEqual(resumed.query, "我想买降噪耳机")
+
+    def test_session_followup_answers_from_previous_result(self) -> None:
+        agent = CommerceAgent()
+        session_id = "test-session-followup"
+        agent.run(
+            "预算2000以内，买通勤降噪耳机，不要入耳式",
+            session_id=session_id,
+        )
+
+        followup = agent.run(
+            "为什么不推荐 Apple AirPods Pro 2 入耳式降噪耳机？",
+            session_id=session_id,
+        )
+
+        self.assertEqual(followup.workflow_status, "followup_answered")
+        self.assertIn("主要原因", followup.answer)
+        self.assertIn("Conversation Follow-up", [step.name for step in followup.trace])
+
+    def test_monitoring_metrics_are_recorded(self) -> None:
+        agent = CommerceAgent()
+        result = agent.run(
+            "预算2000以内，买通勤降噪耳机",
+            session_id="test-session-monitoring",
+        )
+
+        self.assertGreaterEqual(result.monitoring["total_runs"], 1)
+        self.assertIn("completed", result.monitoring["workflow_status_counts"])
+
 
 if __name__ == "__main__":
     unittest.main()

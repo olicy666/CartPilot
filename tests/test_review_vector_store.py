@@ -5,6 +5,8 @@ import unittest
 from pathlib import Path
 
 from backend.data_loader import load_reviews
+from backend.data_loader import load_products
+from backend.retrieval.product_vector_store import ProductVectorStore
 from backend.retrieval.review_vector_store import ReviewVectorStore
 from backend.tools.retrieve_reviews import retrieve_product_reviews
 
@@ -29,6 +31,24 @@ class ReviewVectorStoreTest(unittest.TestCase):
         self.assertTrue(evidence)
         self.assertEqual(evidence[0]["retrieval_source"], "sqlite_vector_store")
         self.assertIn(evidence[0]["review_id"], {"RH007", "RH008"})
+
+    def test_product_vector_store_retrieves_by_category(self) -> None:
+        products = load_products()
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            store = ProductVectorStore.from_products(
+                products,
+                db_path=Path(tmp_dir) / "products.sqlite",
+                rebuild=True,
+            )
+            hits = store.search(
+                query="通勤 降噪 舒适 耳机",
+                category="headphones",
+                top_k=3,
+            )
+
+        self.assertTrue(hits)
+        self.assertTrue(all(item["category"] == "headphones" for item in hits))
+        self.assertEqual(hits[0]["retrieval_source"], "product_vector_store")
 
 
 if __name__ == "__main__":

@@ -22,14 +22,16 @@ from backend.data_loader import (
 )
 from backend.llm.client import LLMClient
 from backend.llm.intent_parser import parse_intent_with_llm
-from backend.memory.user_memory import InMemoryUserMemory
+from backend.memory.user_memory import SQLiteUserMemory
 from backend.models import CategoryProfile, Product, TraceStep
 from backend.retrieval.category_retriever import CategoryRetriever
+from backend.retrieval.product_vector_store import ProductVectorStore
 from backend.retrieval.review_vector_store import ReviewVectorStore
 from backend.tools.compare_products import compare_products
 from backend.tools.filter_constraints import filter_by_constraints
 from backend.tools.generate_recommendation import generate_recommendation
 from backend.tools.rank_candidates import rank_candidates
+from backend.tools.rerank import rerank_ranked_candidates
 from backend.tools.retrieve_reviews import retrieve_product_reviews
 from backend.tools.search_products import search_products
 from backend.tools.self_check import self_check_recommendations
@@ -45,12 +47,17 @@ class CommerceAgentGraph:
         self.products = load_products(self.data_dir)
         self.reviews = load_reviews(self.data_dir)
         self.category_retriever = CategoryRetriever(self.profiles)
+        cache_dir = Path(__file__).resolve().parents[2] / ".cache"
+        self.product_vector_store = ProductVectorStore.from_products(
+            self.products,
+            db_path=cache_dir / "product_vectors.sqlite",
+        )
         self.review_vector_store = ReviewVectorStore.from_reviews(
             self.reviews,
-            db_path=Path(__file__).resolve().parents[2] / ".cache" / "review_vectors.sqlite",
+            db_path=cache_dir / "review_vectors.sqlite",
         )
         self.llm_client = LLMClient()
-        self.memory = InMemoryUserMemory()
+        self.memory = SQLiteUserMemory(cache_dir / "user_memory.sqlite")
         self.graph = self._build_graph()
 
     def invoke(self, state: CommerceAgentState) -> CommerceAgentState:
@@ -69,6 +76,7 @@ class CommerceAgentGraph:
         graph.add_node("constraint_filter", self._constraint_filter)
         graph.add_node("review_evidence", self._review_evidence)
         graph.add_node("rank_candidates", self._rank_candidates)
+        graph.add_node("rerank_candidates", self._rerank_candidates)
         graph.add_node("comparison", self._comparison)
         graph.add_node("recommendation", self._recommendation)
         graph.add_node("self_check", self._self_check)
@@ -94,8 +102,9 @@ class CommerceAgentGraph:
         graph.add_edge("product_search", "constraint_filter")
         graph.add_edge("constraint_filter", "review_evidence")
         graph.add_edge("review_evidence", "rank_candidates")
+        graph.add_edge("rank_candidates", "rerank_candidates")
         graph.add_conditional_edges(
-            "rank_candidates",
+            "rerank_candidates",
             self._route_after_ranking,
             {"compare": "comparison", "recommend": "recommendation"},
         )
@@ -288,6 +297,7 @@ class CommerceAgentGraph:
             query=state["query"],
             category=intent["category"],
             top_k=search_top_k,
+            vector_store=self.product_vector_store,
         )
         banned_product_ids = set(intent.get("banned_product_ids", []))
         if banned_product_ids:
@@ -298,7 +308,7 @@ class CommerceAgentGraph:
             state,
             {"candidates": candidates, "workflow_status": "products_retrieved"},
             name="Product Search",
-            reason="根据识别出的品类和 query 召回候选商品",
+            reason="根据识别出的品类、query 和商品向量索引召回候选商品，并做二次召回排序",
             inputs={"category": intent["category"], "top_k": search_top_k},
             outputs={"candidate_products": _summarize_products(candidates)},
         )
@@ -355,7 +365,7 @@ class CommerceAgentGraph:
                 "aspects": aspects,
                 "queries": review_plan.get("queries", []),
                 "query": review_query,
-                "retrieval_source": "sqlite_vector_store",
+                "retrieval_source": "sqlite_vector_store_with_embedding_provider",
             },
             outputs={"evidence_by_product": evidence_by_product},
         )
@@ -390,6 +400,39 @@ class CommerceAgentGraph:
             reason="结合约束满足度、场景匹配、参数和评论证据排序",
             inputs={"candidate_count": len(state.get("filtered_products", []))},
             outputs={"ranked": ranked_summary},
+        )
+
+    def _rerank_candidates(self, state: CommerceAgentState) -> CommerceAgentState:
+        reranked = rerank_ranked_candidates(
+            ranked_candidates=state.get("ranked_candidates", []),
+            query=state["query"],
+            constraints=state["intent"],
+            evidence_by_product=state.get("evidence_by_product", {}),
+        )
+        reranked = _apply_pinned_products(
+            reranked,
+            state["intent"].get("pinned_product_ids", []),
+        )
+        reranked_summary = [
+            {
+                "product_id": item["product"].product_id,
+                "title": item["product"].title,
+                "score": item["score"],
+                "rerank_score": item.get("rerank_score", 0),
+                "score_breakdown": item["score_breakdown"],
+            }
+            for item in reranked
+        ]
+        return _with_trace(
+            state,
+            {
+                "ranked_candidates": reranked,
+                "workflow_status": "candidates_reranked",
+            },
+            name="Rerank Candidates",
+            reason="用 query、商品文本和评论证据对候选商品做二次排序",
+            inputs={"candidate_count": len(state.get("ranked_candidates", []))},
+            outputs={"reranked": reranked_summary},
         )
 
     def _route_after_ranking(self, state: CommerceAgentState) -> str:
@@ -474,6 +517,7 @@ class CommerceAgentGraph:
             user_id=user_id,
             intent=state["intent"],
         )
+        self.memory.set(user_id, memory_update)
         return _with_trace(
             state,
             {

@@ -8,6 +8,8 @@ from backend.models import CategoryProfile, Product, TraceStep
 class CommerceAgentState(TypedDict, total=False):
     query: str
     user_id: str
+    session_id: str | None
+    run_id: str | None
     require_confirmation: bool
     use_llm: bool
     brief_overrides: dict[str, Any] | None

@@ -130,6 +130,9 @@ class AgentResponse:
     memory_update: dict[str, Any]
     llm_meta: dict[str, Any]
     workflow_status: str
+    run_id: str | None = None
+    session_id: str | None = None
+    monitoring: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return to_plain_dict(self)

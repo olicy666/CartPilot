@@ -5,13 +5,11 @@ from typing import Any
 
 from backend.llm.client import LLMClient
 from backend.models import CategoryProfile
+from backend.prompts.registry import get_prompt
 
 
-SYSTEM_PROMPT = """你是电商导购 Agent 的意图解析器。
-只输出 JSON，不要输出 Markdown。
-目标是把用户购物需求解析成可执行约束，未知字段用 null 或空数组。
-不要创造不存在的品类 id，只能使用候选品类中的 category_id。
-"""
+SYSTEM_PROMPT_TEMPLATE = get_prompt("intent_parser_system")
+SYSTEM_PROMPT = SYSTEM_PROMPT_TEMPLATE.text
 
 
 def parse_intent_with_llm(
@@ -54,10 +52,18 @@ def parse_intent_with_llm(
         temperature=0.0,
     )
     if parsed is None:
-        return None, meta
+        return None, _prompt_meta(meta)
 
     normalized = _normalize_llm_intent(parsed, profiles, fallback_intent)
-    return normalized, meta
+    return normalized, _prompt_meta(meta)
+
+
+def _prompt_meta(meta: dict[str, Any]) -> dict[str, Any]:
+    return {
+        **meta,
+        "prompt_key": SYSTEM_PROMPT_TEMPLATE.key,
+        "prompt_version": SYSTEM_PROMPT_TEMPLATE.version,
+    }
 
 
 def _normalize_llm_intent(

@@ -4,6 +4,7 @@ from typing import Any
 
 from backend.models import Review
 from backend.retrieval.review_vector_store import ReviewVectorStore
+from backend.tools.rerank import rerank_review_evidence
 
 
 def retrieve_product_reviews(
@@ -15,9 +16,15 @@ def retrieve_product_reviews(
     vector_store: ReviewVectorStore | None = None,
 ) -> list[dict[str, Any]]:
     if vector_store is not None:
-        return vector_store.search(
+        evidence = vector_store.search(
             query=query or " ".join(aspects),
             product_id=product_id,
+            aspects=aspects,
+            top_k=top_k,
+        )
+        return rerank_review_evidence(
+            evidence=evidence,
+            query=query or " ".join(aspects),
             aspects=aspects,
             top_k=top_k,
         )
@@ -45,7 +52,12 @@ def retrieve_product_reviews(
                 },
             }
         )
-    return evidence
+    return rerank_review_evidence(
+        evidence=evidence,
+        query=query or " ".join(aspects),
+        aspects=aspects,
+        top_k=top_k,
+    )
 
 
 def _score_review(review: Review, aspects: list[str]) -> float:

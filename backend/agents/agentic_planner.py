@@ -7,13 +7,11 @@ from typing import Any
 from backend.agents.human_feedback import build_human_questions, parse_human_feedback
 from backend.llm.client import LLMClient
 from backend.models import CategoryProfile
+from backend.prompts.registry import get_prompt
 
 
-SYSTEM_PROMPT = """你是一个有边界的电商导购 Agent。
-你可以决定追问什么、如何归一化用户反馈、下一步调用哪些工具、检索哪些评论证据、如何解释推荐。
-必须只输出 JSON，不要输出 Markdown。
-硬约束不得放松：预算上限、用户明确排除项、商品事实和自检仍由代码校验。
-"""
+SYSTEM_PROMPT_TEMPLATE = get_prompt("agentic_planner_system")
+SYSTEM_PROMPT = SYSTEM_PROMPT_TEMPLATE.text
 
 
 def build_agentic_questions(
@@ -26,7 +24,7 @@ def build_agentic_questions(
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     fallback = build_human_questions(intent, profile)
     if not enabled:
-        return fallback, {"used": False, "reason": "agentic_questions_disabled"}
+        return fallback, _prompt_meta({"used": False, "reason": "agentic_questions_disabled"})
 
     payload = {
         "task": "generate_dynamic_human_in_loop_questions",
@@ -60,12 +58,12 @@ def build_agentic_questions(
         temperature=0.2,
     )
     if parsed is None:
-        return fallback, {**meta, "used": False}
+        return fallback, _prompt_meta({**meta, "used": False})
 
     questions = _normalize_questions(parsed.get("questions"), fallback)
     if not questions:
-        return fallback, {**meta, "used": False, "reason": "agentic_questions_empty"}
-    return questions, {**meta, "used": True}
+        return fallback, _prompt_meta({**meta, "used": False, "reason": "agentic_questions_empty"})
+    return questions, _prompt_meta({**meta, "used": True})
 
 
 def normalize_human_feedback_with_agent(
@@ -76,11 +74,11 @@ def normalize_human_feedback_with_agent(
     enabled: bool,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     if not feedback.strip():
-        return {}, {"used": False, "reason": "human_feedback_empty"}
+        return {}, _prompt_meta({"used": False, "reason": "human_feedback_empty"})
 
     rule_overrides = parse_human_feedback(feedback, current_intent, profile)
     if not enabled:
-        return rule_overrides, {"used": False, "reason": "agentic_normalizer_disabled"}
+        return rule_overrides, _prompt_meta({"used": False, "reason": "agentic_normalizer_disabled"})
 
     payload = {
         "task": "normalize_human_feedback",
@@ -117,7 +115,7 @@ def normalize_human_feedback_with_agent(
         temperature=0.0,
     )
     if parsed is None:
-        return rule_overrides, {**meta, "used": False}
+        return rule_overrides, _prompt_meta({**meta, "used": False})
 
     agent_overrides = _normalize_intent_overrides(
         parsed.get("intent_overrides", parsed),
@@ -130,7 +128,7 @@ def normalize_human_feedback_with_agent(
         agent_overrides=agent_overrides,
         feedback=feedback,
     )
-    return merged, {**meta, "used": True}
+    return merged, _prompt_meta({**meta, "used": True})
 
 
 def plan_agent_workflow(
@@ -142,7 +140,7 @@ def plan_agent_workflow(
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     fallback = _fallback_tool_plan(query, intent, profile)
     if not enabled:
-        return fallback, {"used": False, "reason": "agentic_planner_disabled"}
+        return fallback, _prompt_meta({"used": False, "reason": "agentic_planner_disabled"})
 
     payload = {
         "task": "plan_agent_tool_workflow",
@@ -183,10 +181,10 @@ def plan_agent_workflow(
         temperature=0.1,
     )
     if parsed is None:
-        return fallback, {**meta, "used": False}
+        return fallback, _prompt_meta({**meta, "used": False})
 
     plan = _normalize_tool_plan(parsed, fallback, profile)
-    return plan, {**meta, "used": True}
+    return plan, _prompt_meta({**meta, "used": True})
 
 
 def explain_recommendations_with_agent(
@@ -198,9 +196,9 @@ def explain_recommendations_with_agent(
     enabled: bool,
 ) -> tuple[list[dict[str, Any]], str | None, dict[str, Any]]:
     if not recommendations:
-        return recommendations, None, {"used": False, "reason": "no_recommendations"}
+        return recommendations, None, _prompt_meta({"used": False, "reason": "no_recommendations"})
     if not enabled:
-        return recommendations, None, {"used": False, "reason": "agentic_explainer_disabled"}
+        return recommendations, None, _prompt_meta({"used": False, "reason": "agentic_explainer_disabled"})
 
     payload = {
         "task": "explain_recommendations",
@@ -231,11 +229,11 @@ def explain_recommendations_with_agent(
         temperature=0.2,
     )
     if parsed is None:
-        return recommendations, None, {**meta, "used": False}
+        return recommendations, None, _prompt_meta({**meta, "used": False})
 
     explained = _apply_explanations(recommendations, parsed.get("items", []))
     summary = parsed.get("answer_summary") if isinstance(parsed.get("answer_summary"), str) else None
-    return explained, summary, {**meta, "used": True}
+    return explained, summary, _prompt_meta({**meta, "used": True})
 
 
 def _profile_payload(profile: CategoryProfile) -> dict[str, Any]:
@@ -254,6 +252,14 @@ def _profile_payload(profile: CategoryProfile) -> dict[str, Any]:
         "required_specs": profile.required_specs,
         "scenario_names": list(profile.scenario_weights.keys()),
         "common_risks": profile.common_risks,
+    }
+
+
+def _prompt_meta(meta: dict[str, Any]) -> dict[str, Any]:
+    return {
+        **meta,
+        "prompt_key": SYSTEM_PROMPT_TEMPLATE.key,
+        "prompt_version": SYSTEM_PROMPT_TEMPLATE.version,
     }
 
 

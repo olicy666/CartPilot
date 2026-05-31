@@ -12,7 +12,10 @@ The project is designed as an interview-ready AI application: the LLM is allowed
 - **Human-in-the-loop guide**: asks dynamic choice-based follow-up questions before recommendation.
 - **Bounded agent planning**: with `use_llm=true`, the agent can plan questions, tool flow, RAG queries, and recommendation explanations.
 - **Vector review retrieval**: reviews are indexed in a lightweight SQLite vector store and retrieved as evidence.
+- **Embedding-ready vector stores**: product and review retrieval use pluggable embedding providers; local hash embeddings work offline, and OpenAI-compatible embeddings can be enabled through env vars.
+- **Reranking and monitoring**: second-pass rerankers refine product/review ordering, while SQLite-backed run traces expose fallback, error, and self-check metrics.
 - **Deterministic guardrails**: budget filters, excluded specs, product facts, and self-check are handled by code.
+- **Session recovery**: Human-in-the-loop checkpoints and follow-up questions are persisted by session.
 - **Multi-category support**: headphones, laptops, tablets, phones, monitors, projectors, coffee machines, and air fryers.
 - **Productized demo UI**: Streamlit interface for purchase brief, requirement confirmation, recommendations, evidence, and debug trace.
 

@@ -2,12 +2,15 @@ from __future__ import annotations
 
 from typing import Any
 
+from backend.safety.policy import evaluate_recommendation_safety
+
 
 def self_check_recommendations(
     recommendations: list[dict[str, Any]],
     constraints: dict[str, Any],
 ) -> dict[str, Any]:
     issues: list[dict[str, str]] = []
+    safety_issues = evaluate_recommendation_safety(recommendations)
     budget_max = constraints.get("budget_max")
     exclude_specs = constraints.get("exclude_specs", {})
 
@@ -42,5 +45,7 @@ def self_check_recommendations(
     return {
         "passed": not issues,
         "issues": issues,
+        "safety_passed": not safety_issues,
+        "safety_issues": safety_issues,
         "checked_items": len(recommendations),
     }
