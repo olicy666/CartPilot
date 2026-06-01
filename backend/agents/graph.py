@@ -25,8 +25,10 @@ from backend.llm.intent_parser import parse_intent_with_llm
 from backend.memory.user_memory import SQLiteUserMemory
 from backend.models import CategoryProfile, Product, TraceStep
 from backend.retrieval.category_retriever import CategoryRetriever
-from backend.retrieval.product_vector_store import ProductVectorStore
-from backend.retrieval.review_vector_store import ReviewVectorStore
+from backend.retrieval.vector_store_factory import (
+    build_product_vector_store,
+    build_review_vector_store,
+)
 from backend.tools.compare_products import compare_products
 from backend.tools.filter_constraints import filter_by_constraints
 from backend.tools.generate_recommendation import generate_recommendation
@@ -48,13 +50,13 @@ class CommerceAgentGraph:
         self.reviews = load_reviews(self.data_dir)
         self.category_retriever = CategoryRetriever(self.profiles)
         cache_dir = Path(__file__).resolve().parents[2] / ".cache"
-        self.product_vector_store = ProductVectorStore.from_products(
+        self.product_vector_store = build_product_vector_store(
             self.products,
-            db_path=cache_dir / "product_vectors.sqlite",
+            cache_dir=cache_dir,
         )
-        self.review_vector_store = ReviewVectorStore.from_reviews(
+        self.review_vector_store = build_review_vector_store(
             self.reviews,
-            db_path=cache_dir / "review_vectors.sqlite",
+            cache_dir=cache_dir,
         )
         self.llm_client = LLMClient()
         self.memory = SQLiteUserMemory(cache_dir / "user_memory.sqlite")
@@ -365,7 +367,7 @@ class CommerceAgentGraph:
                 "aspects": aspects,
                 "queries": review_plan.get("queries", []),
                 "query": review_query,
-                "retrieval_source": "sqlite_vector_store_with_embedding_provider",
+                "retrieval_source": type(self.review_vector_store).__name__,
             },
             outputs={"evidence_by_product": evidence_by_product},
         )

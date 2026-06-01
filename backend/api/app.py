@@ -3,11 +3,13 @@ from __future__ import annotations
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
+from backend.agents.shopping_copilot import ShoppingCopilot
 from backend.agents.workflow import CommerceAgent
 
 
 app = FastAPI(title="CommerceMind-Agent API")
 agent = CommerceAgent()
+copilot = ShoppingCopilot(agent=agent)
 
 
 class ChatRequest(BaseModel):
@@ -18,6 +20,13 @@ class ChatRequest(BaseModel):
     use_llm: bool = False
     brief_overrides: dict | None = None
     human_feedback: str | None = None
+
+
+class ShoppingEventRequest(BaseModel):
+    session_id: str = "demo-session"
+    user_id: str = "demo-user"
+    event_type: str = Field(..., min_length=1)
+    payload: dict = Field(default_factory=dict)
 
 
 @app.get("/health")
@@ -53,3 +62,13 @@ def monitoring_traces(limit: int = 20) -> list[dict]:
 def session_checkpoint(session_id: str) -> dict:
     checkpoint = agent.checkpoints.load_pending(session_id)
     return checkpoint or {}
+
+
+@app.post("/shopping/events")
+def shopping_event(request: ShoppingEventRequest) -> dict:
+    return copilot.handle_event(request.model_dump())
+
+
+@app.get("/shopping/sessions/{session_id}")
+def shopping_session_state(session_id: str) -> dict:
+    return copilot.get_state(session_id)
