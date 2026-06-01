@@ -7,7 +7,7 @@
 - Category Profile：定义品类别名、决策维度、必要参数、场景权重和常见风险。
 - Category Skill Pack：`backend/data/category_skills/*.json` 可以覆盖或扩展品类知识，新增品类不需要改主 workflow。
 - Product Data：保存商品标题、品牌、价格、参数、描述和标签。
-- Review Evidence：保存评论内容、评分和 aspect sentiment，并通过 SQLite 向量库支持证据召回。
+- Review Evidence：保存评论内容、评分和 aspect sentiment，并通过 Chroma 向量库支持证据召回；未安装 Chroma 时可回退 SQLite。
 
 ## Workflow
 
@@ -37,9 +37,61 @@ User Query
 
 预算上限、用户明确排除项、商品事实过滤和 Self Check 仍由确定性代码执行。
 
-## 评论向量库
+## Event-driven Shopping Copilot
 
-`backend/retrieval/review_vector_store.py` 实现了一个轻量 SQLite 向量库。评论文本和 aspect 会被转换为归一化 hashed text vector，存入 `.cache/review_vectors.sqlite`。`Review Evidence Retrieval` 节点会按用户 query 与关注维度进行 top-k cosine 检索。这个接口后续可以替换为 Chroma、Qdrant 或 Milvus。
+为了把 Human-in-the-loop 从“推荐前确认”扩展到完整购物过程，项目新增了 `backend/agents/shopping_copilot.py`。它把用户购物行为建模为事件流，而不是只等待用户输入 query。
+
+当前支持的事件包括：
+
+- `search_submitted`：用户提交搜索词，系统生成 Purchase Brief。
+- `assistant_question_answered`：用户回答追问，系统更新 intent 和任务卡。
+- `product_viewed`：用户点进商品页，Copilot 检查当前商品是否违反硬约束，并召回评论证据。
+- `review_section_opened`：用户打开评论区，Copilot 重点展示和当前需求相关的评论证据。
+- `compare_added`：用户把商品加入对比，Copilot 自动生成对比表。
+- `cart_added` / `cart_removed`：同步购物车状态，并在加购时做商品检查。
+- `checkout_started`：下单前做 final checkout check。
+
+Copilot 会维护 `ShoppingSessionState`：
+
+```text
+session_id
+stage
+query
+intent
+purchase_brief
+current_product_id
+viewed_products
+compared_products
+cart_products
+signals
+assistant_cards
+```
+
+这让系统从 query-driven workflow 升级为 event-driven side assistant：
+
+```text
+Shopping Event
+  -> Session State Update
+  -> Stage Detection
+  -> Intervention Policy
+  -> Product / Review Tooling
+  -> Assistant Card
+```
+
+新增 API：
+
+- `POST /shopping/events`
+- `GET /shopping/sessions/{session_id}`
+
+新增 demo：
+
+```bash
+streamlit run frontend/copilot_app.py
+```
+
+## 向量检索
+
+默认向量检索由 `backend/retrieval/chroma_vector_store.py` 实现，商品和评论分别写入 `.cache/chroma` 下的持久化 Chroma collection。评论文本和 aspect 会被转换为 embedding，`Review Evidence Retrieval` 节点按用户 query 与关注维度进行 top-k 检索。`backend/retrieval/vector_store_factory.py` 负责选择向量库，默认优先 Chroma；如果环境没有安装 `chromadb`，会回退到原来的 SQLite store，保证本地测试和 demo 不被外部依赖阻塞。
 
 后续可以继续增强：
 
@@ -55,7 +107,7 @@ User Query
 
 当前版本保留虚拟商品和评论数据，但已经接入 9 类生产化能力的本地实现：
 
-- Embedding / Vector DB：`backend/retrieval/embeddings.py` 提供本地 hash embedding 和 OpenAI-compatible embedding provider；`ProductVectorStore` 与 `ReviewVectorStore` 使用 SQLite 保存向量索引。默认离线可跑，设置 `EMBEDDING_PROVIDER=openai` 后可调用真实 embedding 接口。
+- Embedding / Vector DB：`backend/retrieval/embeddings.py` 提供本地 hash embedding 和 OpenAI-compatible embedding provider；`ChromaProductVectorStore` 与 `ChromaReviewVectorStore` 默认使用 Chroma 保存向量索引，SQLite 作为 fallback。设置 `EMBEDDING_PROVIDER=openai` 后可调用真实 embedding 接口。
 - Reranker：`backend/tools/rerank.py` 对商品召回、评论证据和最终候选做二次排序，排序结果会写入 `score_breakdown.rerank` 和 evidence 的 `rerank_score`。
 - 可恢复 Human-in-the-loop：`SQLiteCheckpointStore` 会按 `session_id` 保存等待确认的 purchase brief；同 session 带 `human_feedback` 继续请求时会自动恢复上一轮 query。
 - 数据库记忆：默认用户偏好记忆从进程内 dict 改为 `.cache/user_memory.sqlite`。

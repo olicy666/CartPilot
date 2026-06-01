@@ -8,6 +8,10 @@ from backend.data_loader import load_reviews
 from backend.data_loader import load_products
 from backend.retrieval.product_vector_store import ProductVectorStore
 from backend.retrieval.review_vector_store import ReviewVectorStore
+from backend.retrieval.vector_store_factory import (
+    build_product_vector_store,
+    build_review_vector_store,
+)
 from backend.tools.retrieve_reviews import retrieve_product_reviews
 
 
@@ -49,6 +53,30 @@ class ReviewVectorStoreTest(unittest.TestCase):
         self.assertTrue(hits)
         self.assertTrue(all(item["category"] == "headphones" for item in hits))
         self.assertEqual(hits[0]["retrieval_source"], "product_vector_store")
+
+    def test_vector_store_factory_prefers_available_provider(self) -> None:
+        products = load_products()
+        reviews = load_reviews()
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            product_store = build_product_vector_store(
+                products,
+                cache_dir=Path(tmp_dir),
+                rebuild=True,
+            )
+            review_store = build_review_vector_store(
+                reviews,
+                cache_dir=Path(tmp_dir),
+                rebuild=True,
+            )
+
+        self.assertIn(
+            type(product_store).__name__,
+            {"ChromaProductVectorStore", "ProductVectorStore"},
+        )
+        self.assertIn(
+            type(review_store).__name__,
+            {"ChromaReviewVectorStore", "ReviewVectorStore"},
+        )
 
 
 if __name__ == "__main__":
